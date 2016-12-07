@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Assets>
+  <Asset Id="1" Name="" Type="RPGStatCollectionAsset">
+    <Stat BaseValue="10" CategoryId="1" AssignedStatId="1" />
+    <Stat BaseValue="0" CategoryId="0" AssignedStatId="0" />
+  </Asset>
+</Assets>
