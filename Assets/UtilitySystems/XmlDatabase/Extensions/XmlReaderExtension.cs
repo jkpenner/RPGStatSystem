@@ -83,5 +83,18 @@ namespace UtilitySystems.XmlDatabase {
             }
             return null;
         }
+
+        static public T GetAttrResource<T>(this XmlReader reader, string name) where T : UnityEngine.Object{
+            string path = GetAttrString(reader, name, "");
+            if (!string.IsNullOrEmpty(path)) {
+                var go = Resources.Load<T>(path);
+                if (go != null) {
+                    return go;
+                } else {
+                    Debug.LogWarning("No Resource not found at path: " + path);
+                }
+            }
+            return null;
+        }
     }
 }

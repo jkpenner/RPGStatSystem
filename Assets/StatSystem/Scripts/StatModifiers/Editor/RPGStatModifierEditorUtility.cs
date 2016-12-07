@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using RPGSystems.Utility.Editor;
+using UtilitySystems.XmlDatabase.Editor;
 
 namespace RPGSystems.StatSystem.Editor {
     /// <summary>

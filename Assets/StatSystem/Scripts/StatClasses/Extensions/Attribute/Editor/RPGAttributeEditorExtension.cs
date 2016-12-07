@@ -1,21 +1,17 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEditor;
-using System.Collections;
-using System;
-using RPGSystems.StatSystem;
-using RPGSystems.StatSystem.Database;
-using RPGSystems.Utility.Editor;
-using UtilitySystem.XmlDatabase.Editor;
+using UtilitySystems.XmlDatabase.Editor;
 
 namespace RPGSystems.StatSystem.Editor {
-    public class RPGAttributeEditorExtension : IEditorExtension {
+    public class RPGAttributeEditorExtension : EditorExtension {
         private Vector2 scroll = Vector2.zero;
 
-        public bool CanHandleType(Type type) {
+        public override bool CanHandleType(Type type) {
             return typeof(RPGAttributeAsset).IsAssignableFrom(type);
         }
 
-        public void OnGUI(object asset) {
+        public override void OnGUI(object asset) {
             var stat = asset as RPGAttributeAsset;
 
             GUILayout.BeginHorizontal(EditorStyles.toolbar);

@@ -1,15 +1,14 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Linq;
+using UnityEngine;
 using UnityEditor;
 using RPGSystems.StatSystem.Database;
-using RPGSystems.StatSystem.Editor;
 using UtilitySystems.XmlDatabase;
-using UtilitySystem.XmlDatabase.Editor;
-using System;
-using System.Linq;
+using UtilitySystems.XmlDatabase.Editor;
 
 namespace RPGSystems.StatSystem.Editor {
     public class RPGStatCollectionWindow : XmlDatabaseWindowComplex<RPGStatCollectionAsset> {
+        RPGStatCollectionDatabase _database = null;
+
         private Vector2 statSelectionScroll = Vector2.zero;
         private float statSelectionWidth = 200;
 
@@ -34,17 +33,21 @@ namespace RPGSystems.StatSystem.Editor {
         }
 
         protected override AbstractXmlDatabase<RPGStatCollectionAsset> GetDatabaseInstance() {
-            return RPGStatCollectionDatabase.Instance;
+            if (_database == null) {
+                _database = new RPGStatCollectionDatabase();
+                _database.LoadDatabase();
+            }
+            return _database;
         }
 
-        protected override RPGStatCollectionAsset CreateNewDatabaseAsset() {    
+        protected override RPGStatCollectionAsset CreateDefaultAsset() {    
             return new RPGStatCollectionAsset(GetDatabaseInstance().GetNextHighestId());
         }
 
         protected override void DisplayAssetGUI(RPGStatCollectionAsset asset) {
             GUILayout.BeginVertical();
 
-            var selectedCollection = RPGStatCollectionDatabase.Instance.Get(SelectedAssetId, true, false);
+            var selectedCollection = _database.Get(SelectedAssetId);
             if (selectedCollection != null) {
 
                 GUILayout.Label(selectedCollection.Name, EditorStyles.toolbarButton);
@@ -77,12 +80,12 @@ namespace RPGSystems.StatSystem.Editor {
             GUILayout.BeginVertical();
 
             GUILayout.BeginHorizontal(EditorStyles.toolbar);
-            var statType = RPGStatTypeDatabase.Instance.Get(stat.AssignedStatId, true, false);
+            var statType = RPGStatTypeDatabase.Instance.Get(stat.AssignedStatId, true);
 
             GUILayout.Label(string.Format("[{0}]: {1}",
                 stat.CreateInstance().GetType().Name, statType == null ? "Stat Type Not Set" : statType.Name));
             if (GUILayout.Button(statType == null ? "Assign Type" : "Change Type", EditorStyles.toolbarButton, GUILayout.Width(100))) {
-                RPGStatTypeDatabase.Instance.LoadAssets(true);
+                RPGStatTypeDatabase.Instance.LoadDatabase();
                 XmlDatabaseEditorUtility.ShowContext(RPGStatTypeDatabase.Instance, (statTypeAsset) => {
                     stat.AssignedStatId = statTypeAsset.Id;
                 }, typeof(RPGStatTypeWindow));
@@ -107,7 +110,7 @@ namespace RPGSystems.StatSystem.Editor {
             statSelectionScroll = GUILayout.BeginScrollView(statSelectionScroll, false, true);
 
             var categoryGroups = asset.Stats.GroupBy(stat => {
-                var categoryAsset = RPGStatCategoryDatabase.Instance.Get(stat.StatCategoryId, true, false);
+                var categoryAsset = RPGStatCategoryDatabase.Instance.Get(stat.StatCategoryId, true);
                 if (categoryAsset != null) {
                     return stat.StatCategoryId;
                 } else {
@@ -119,7 +122,7 @@ namespace RPGSystems.StatSystem.Editor {
             GUILayout.BeginVertical("Box", GUILayout.ExpandWidth(true));
             foreach (var categoryGroup in categoryGroups) {
                 var categoryAsset = RPGStatCategoryDatabase.Instance.Get(
-                    categoryGroup.First().StatCategoryId, true, false);
+                    categoryGroup.First().StatCategoryId, true);
 
                 if (categoryAsset != null) {
                     GUILayout.Label(categoryAsset.Name, EditorStyles.centeredGreyMiniLabel);
@@ -129,7 +132,7 @@ namespace RPGSystems.StatSystem.Editor {
 
                 foreach (var stat in categoryGroup) {
                     if (stat != null) {
-                        var statType = RPGStatTypeDatabase.Instance.Get(stat.AssignedStatId, true, false);
+                        var statType = RPGStatTypeDatabase.Instance.Get(stat.AssignedStatId, true);
 
                         string displayText;
                         if (statType != null) {
@@ -163,7 +166,7 @@ namespace RPGSystems.StatSystem.Editor {
         }
 
         private void DisplayStatSelectionFooter() {
-            var selectedCollection = RPGStatCollectionDatabase.Instance.Get(SelectedAssetId, true, false);
+            var selectedCollection = RPGStatCollectionDatabase.Instance.Get(SelectedAssetId, true);
             if (selectedCollection != null) {
 
                 GUILayout.BeginHorizontal(GUILayout.Width(200));

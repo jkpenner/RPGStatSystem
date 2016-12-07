@@ -1,17 +1,16 @@
-﻿using UnityEditor;
-using System;
-using RPGSystems.StatSystem.Database;
-using RPGSystems.Utility.Editor;
-using UtilitySystem.XmlDatabase.Editor;
+﻿using System;
 using UnityEngine;
+using UnityEditor;
+using RPGSystems.StatSystem.Database;
+using UtilitySystems.XmlDatabase.Editor;
 
 namespace RPGSystems.StatSystem.Editor {
-    public class RPGStatEditorExtension : IEditorExtension {
-        public bool CanHandleType(Type type) {
+    public class RPGStatEditorExtension : EditorExtension {
+        public override bool CanHandleType(Type type) {
             return typeof(RPGStatAsset).IsAssignableFrom(type);
         }
 
-        public void OnGUI(object asset) {
+        public override void OnGUI(object asset) {
             RPGStatAsset stat = asset as RPGStatAsset;
             stat.StatBaseValue = EditorGUILayout.IntField("Stat Base Value", stat.StatBaseValue);
 

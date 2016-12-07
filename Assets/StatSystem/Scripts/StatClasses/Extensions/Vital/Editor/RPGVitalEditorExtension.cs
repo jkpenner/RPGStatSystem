@@ -1,13 +1,13 @@
 ﻿using System;
-using RPGSystems.Utility.Editor;
+using UtilitySystems.XmlDatabase.Editor;
 
 namespace RPGSystems.StatSystem.Editor {
-    public class RPGVitalEditorExtension : IEditorExtension {
-        public bool CanHandleType(Type type) {
+    public class RPGVitalEditorExtension : EditorExtension {
+        public override bool CanHandleType(Type type) {
             return typeof(RPGVitalAsset).IsAssignableFrom(type);
         }
 
-        public void OnGUI(object asset) {
+        public override void OnGUI(object asset) {
 
         }
     }

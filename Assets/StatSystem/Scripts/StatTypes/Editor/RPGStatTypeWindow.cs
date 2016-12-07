@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
 using UnityEditor;
-using System;
 using RPGSystems.StatSystem.Database;
 using UtilitySystems.XmlDatabase;
-using UtilitySystem.XmlDatabase.Editor;
+using UtilitySystems.XmlDatabase.Editor;
 
 namespace RPGSystems.StatSystem.Editor {
     public class RPGStatTypeWindow : XmlDatabaseWindowSimple<StatTypeAsset> {
+        private RPGStatTypeDatabase _database = null;
+
         [MenuItem("Window/RPGSystems/Stats/Stat Types")]
         static public void ShowWindow() {
             var wnd = GetWindow<RPGStatTypeWindow>();
@@ -16,11 +16,11 @@ namespace RPGSystems.StatSystem.Editor {
         }
 
         protected override AbstractXmlDatabase<StatTypeAsset> GetDatabaseInstance() {
-            return RPGStatTypeDatabase.Instance;
-        }
-
-        protected override StatTypeAsset CreateNewDatabaseAsset() {
-            return new StatTypeAsset(GetDatabaseInstance().GetNextHighestId());
+            if (_database == null) {
+                _database = new RPGStatTypeDatabase();
+                _database.LoadDatabase();
+            }
+            return _database;
         }
 
         protected override void DisplayAssetGUI(StatTypeAsset asset) {

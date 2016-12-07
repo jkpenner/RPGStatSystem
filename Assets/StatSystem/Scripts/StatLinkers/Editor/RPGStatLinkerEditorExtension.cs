@@ -2,17 +2,15 @@
 using UnityEditor;
 using System;
 using RPGSystems.StatSystem.Database;
-using RPGSystems.StatSystem.Editor;
-using RPGSystems.Utility.Editor;
-using UtilitySystem.XmlDatabase.Editor;
+using UtilitySystems.XmlDatabase.Editor;
 
 namespace RPGSystems.StatSystem.Editor {
-    public class RPGStatLinkerEditorExtension : IEditorExtension {
-        public bool CanHandleType(Type type) {
+    public class RPGStatLinkerEditorExtension : EditorExtension {
+        public override bool CanHandleType(Type type) {
             return typeof(RPGStatLinkerAsset).IsAssignableFrom(type);
         }
 
-        public void OnGUI(object asset) {
+        public override void OnGUI(object asset) {
             var link = asset as RPGStatLinkerAsset;
             if (link != null) {
                 var statType = RPGStatTypeDatabase.Instance.Get(link.linkedStatType);

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using RPGSystems.StatSystem.Database;
-using UtilitySystem.XmlDatabase.Editor;
+using UtilitySystems.XmlDatabase.Editor;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -38,7 +38,7 @@ namespace RPGSystems.StatSystem.Editor {
             // the assigned stat collection via a dialog popup
             EditorGUI.BeginDisabledGroup(Application.isPlaying);
             if (GUILayout.Button(string.Format("[ID: {0}] {1}", Mathf.Max(0, collection.StatCollectionId).ToString("D4"), displayText), EditorStyles.toolbarPopup)) {
-                RPGStatCollectionDatabase.Instance.LoadAssets();
+                RPGStatCollectionDatabase.Instance.LoadDatabase();
                 XmlDatabaseEditorUtility.ShowContext(RPGStatCollectionDatabase.Instance, (value) => {
                     collection.StatCollectionId = value.Id;
                 }, typeof(RPGStatCollectionWindow));

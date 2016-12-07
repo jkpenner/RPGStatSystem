@@ -4,10 +4,12 @@ using UnityEditor;
 using System;
 using RPGSystems.StatSystem.Database;
 using UtilitySystems.XmlDatabase;
-using UtilitySystem.XmlDatabase.Editor;
+using UtilitySystems.XmlDatabase.Editor;
 
 namespace RPGSystems.StatSystem.Editor {
     public class RPGStatCategoryWindow : XmlDatabaseWindowSimple<StatCategoryAsset> {
+        private RPGStatCategoryDatabase _database;
+
         [MenuItem("Window/RPGSystems/Stats/Stat Categories")]
         static public void ShowWindow() {
             var wnd = GetWindow<RPGStatCategoryWindow>();
@@ -16,11 +18,11 @@ namespace RPGSystems.StatSystem.Editor {
         }
 
         protected override AbstractXmlDatabase<StatCategoryAsset> GetDatabaseInstance() {
-            return RPGStatCategoryDatabase.Instance;
-        }
-
-        protected override StatCategoryAsset CreateNewDatabaseAsset() {
-            return new StatCategoryAsset(GetDatabaseInstance().GetNextHighestId());
+            if (_database == null) {
+                _database = new RPGStatCategoryDatabase();
+                _database.LoadDatabase();
+            }
+            return _database;
         }
 
         protected override void DisplayAssetGUI(StatCategoryAsset asset) {
