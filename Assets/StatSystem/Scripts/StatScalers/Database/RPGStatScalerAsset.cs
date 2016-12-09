@@ -4,14 +4,16 @@ using UtilitySystems.XmlDatabase;
 using System;
 using System.Xml;
 
-public class RPGStatScalerAsset : XmlDatabaseAsset {
-    public RPGStatScalerAsset() : base() { }
-    public RPGStatScalerAsset(int id) : base(id) { }
+namespace RPGSystems.StatSystem {
+    public class RPGStatScalerAsset : XmlDatabaseAsset {
+        public RPGStatScalerAsset() : base() { }
+        public RPGStatScalerAsset(int id) : base(id) { }
 
-    public override void OnLoadAsset(XmlReader reader) { }
-    public override void OnSaveAsset(XmlWriter writer) { }
+        public override void OnLoadAsset(XmlReader reader) { }
+        public override void OnSaveAsset(XmlWriter writer) { }
 
-    public virtual RPGStatScaler CreateInstance() {
-        return null;
+        public virtual RPGStatScaler CreateInstance() {
+            return null;
+        }
     }
 }

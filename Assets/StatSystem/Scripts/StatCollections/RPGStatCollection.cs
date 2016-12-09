@@ -16,6 +16,12 @@ namespace RPGSystems.StatSystem {
             set { _statCollectionId = value; }
         }
 
+        private bool _isCollectionSetup = false;
+        public bool IsCollectionSetup {
+            get { return _isCollectionSetup; }
+            set { _isCollectionSetup = value; }
+        }
+
         private Dictionary<int, RPGStat> _statDict;
 
         /// <summary>
@@ -33,10 +39,16 @@ namespace RPGSystems.StatSystem {
             }
         }
 
+        [SerializeField]
+        private int _normalLevel = 1;
         /// <summary>
         /// The level value based off of aquired exp
         /// </summary>
-        public int NormalLevel { get; private set; }
+        public int NormalLevel {
+            get { return _normalLevel; }
+            private set { _normalLevel = value; }
+        }
+
         /// <summary>
         /// The level value the collection is scaled to
         /// </summary>
@@ -59,7 +71,7 @@ namespace RPGSystems.StatSystem {
         public void ModifyExp(int amount) {
             CurrentExp += amount;
 
-            while(CurrentExp >= RequiredExp) {
+            while (CurrentExp >= RequiredExp) {
                 CurrentExp -= RequiredExp;
 
                 // Increase current level
@@ -73,7 +85,7 @@ namespace RPGSystems.StatSystem {
         /// Sets the collection's normal level and updates
         /// the required experience to level
         /// </summary>
-        private void SetLevel(int level) {
+        public void SetLevel(int level) {
             NormalLevel = Mathf.Max(level, 1);
             RequiredExp = GetExpForLevel(Level + 1);
             ScaleStatCollection(Level);
@@ -118,23 +130,36 @@ namespace RPGSystems.StatSystem {
         /// <summary>
         /// Initializes the RPGStats class
         /// </summary>
-        private void Awake() {
-            var collection = RPGStatCollectionDatabase.Instance.Get(StatCollectionId);
+        //private void Awake() {
+        //    if (IsCollectionSetup == false) {
+        //        SetupCollection();
+        //
+        //        SetLevel(NormalLevel);
+        //        CurrentExp = GetExpForLevel(NormalLevel);
+        //    }
+        //}
+
+        public void SetupCollection() {
+            var collection = RPGStatDatabase.StatCollections.Get(StatCollectionId);
             if (collection != null) {
                 SetupCollection(collection);
             }
         }
 
         public void SetupCollection(RPGStatCollectionAsset collectionAsset) {
-            if(collectionAsset != null) {
+            IsCollectionSetup = true;
+
+            if (collectionAsset != null) {
+                StatDict.Clear();
+
                 // Initial add all stats to the collection
                 foreach (var statAsset in collectionAsset.Stats) {
                     //Debug.LogFormat("Adding Stat {0} to Collection, Asset {1}", info.statTypeid, info.statAsset.statName);
                     if (!StatDict.ContainsKey(statAsset.AssignedStatId)) {
                         StatDict.Add(statAsset.AssignedStatId, statAsset.CreateInstance());
-                        Debug.LogFormat("Added Stat ID {0} with value {1}", 
-                            statAsset.AssignedStatId,
-                            StatDict[statAsset.AssignedStatId].StatValue);
+                        //Debug.LogFormat("Added Stat ID {0} with value {1}",
+                        //    statAsset.AssignedStatId,
+                        //    StatDict[statAsset.AssignedStatId].StatValue);
                     } else {
                         // Stat already exsists in the collection
                         Debug.LogWarningFormat("Attempting to add Stat with id {0}, " +
@@ -166,11 +191,13 @@ namespace RPGSystems.StatSystem {
 
                 // Set all stat's that have a current value to their max values
                 foreach (var statAsset in collectionAsset.Stats) {
-                    var currentValue = GetStat(statAsset.AssignedStatId) as IStatCurrentValue;
+                    var currentValue = GetStat(statAsset.AssignedStatId) as IStatValueCurrent;
                     if (currentValue != null) {
                         currentValue.SetCurrentValueToMax();
                     }
                 }
+
+                IsCollectionSetup = true;
             }
         }
 
@@ -192,10 +219,28 @@ namespace RPGSystems.StatSystem {
         }
 
         /// <summary>
+        /// Trys to get the RPGStat with the given RPGStatTypeId.
+        /// If stat exists, returns true.
+        /// </summary>
+        public bool TryGetStat(int statTypeId, out RPGStat stat) {
+            stat = GetStat(statTypeId);
+            return stat != null;
+        }
+
+        /// <summary>
         /// Gets the RPGStat with the given int and ID as type T
         /// </summary>
         public T GetStat<T>(int statTypeId) where T : RPGStat {
             return GetStat(statTypeId) as T;
+        }
+
+        /// <summary>
+        /// Trys to get the RPGStat with the given RPGStatTypeId as
+        /// type T. If stat exists, returns true.
+        /// </summary>
+        public bool TryGetStat<T>(int statTypeId, out T stat) where T : RPGStat {
+            stat = GetStat<T>(statTypeId);
+            return stat != null;
         }
 
         /// <summary>

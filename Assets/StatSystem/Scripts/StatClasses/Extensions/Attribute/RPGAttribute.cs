@@ -7,11 +7,6 @@ namespace RPGSystems.StatSystem {
     /// </summary>
     public class RPGAttribute : RPGStatModifiable, IStatLinkable {
         /// <summary>
-        /// Used By StatLevelValue Property
-        /// </summary>
-        private int _statLevelValue;
-
-        /// <summary>
         /// Used By StatLinker Value Property
         /// </summary>
         private int _statLinkerValue;
@@ -20,13 +15,6 @@ namespace RPGSystems.StatSystem {
         /// List of all stat linkers applied to the stat
         /// </summary>
         private List<RPGStatLinker> _statLinkers;
-
-        /// <summary>
-        /// The value gained by the ScaledStat method
-        /// </summary>
-        public int StatLevelValue {
-            get { return _statLevelValue; }
-        }
 
         /// <summary>
         /// the value gained from all applied stat linkers
@@ -39,7 +27,7 @@ namespace RPGSystems.StatSystem {
         /// Gets the stat base value with the StatLevelValue and StatLinkerValue added
         /// </summary>
         public override int StatBaseValue {
-            get { return base.StatBaseValue + StatLevelValue + StatLinkerValue; }
+            get { return base.StatBaseValue + StatLinkerValue; }
         }
 
         /// <summary>
@@ -47,15 +35,6 @@ namespace RPGSystems.StatSystem {
         /// </summary>
         public RPGAttribute(RPGAttributeAsset asset) : base(asset) {
             _statLinkers = new List<RPGStatLinker>();
-        }
-
-        /// <summary>
-        /// Overridable method that scales the class based off the passed value
-        /// Triggers the stat's Value Change event
-        /// </summary>
-        public virtual void ScaleStatToLevel(int level) {
-            _statLevelValue = level;
-            TriggerValueChange();
         }
 
         /// <summary>
@@ -85,14 +64,6 @@ namespace RPGSystems.StatSystem {
 
 
         /// <summary>
-        /// Listens to the attached StatLinker's Linked Stat and Updates 
-        /// the StatLinkerValue if a stat linker value changes
-        /// </summary>
-        private void OnLinkedStatValueChange(RPGStat stat) {
-            UpdateLinkerValue();
-        }
-
-        /// <summary>
         /// Removes all linkers from the stat
         /// </summary>
         public void ClearLinkers() {
@@ -102,6 +73,14 @@ namespace RPGSystems.StatSystem {
                 }
             }
             _statLinkers.Clear();
+        }
+
+        /// <summary>
+        /// Listens to the attached StatLinker's Linked Stat and Updates 
+        /// the StatLinkerValue if a stat linker value changes
+        /// </summary>
+        private void OnLinkedStatValueChange(IStatValue iStatValue) {
+            UpdateLinkerValue();
         }
 
         /// <summary>
@@ -118,8 +97,8 @@ namespace RPGSystems.StatSystem {
             }
 
             // Trigger value change if new value
-            if (_statLevelValue != newLinkerValue) {
-                _statLevelValue = newLinkerValue;
+            if (_statLinkerValue != newLinkerValue) {
+                _statLinkerValue = newLinkerValue;
                 TriggerValueChange();
             }
         }

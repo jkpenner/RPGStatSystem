@@ -9,5 +9,7 @@
 namespace RPGSystems.StatSystem {
 	public enum RPGStatCategory {
 		Major = 1,
+		Minor = 2,
+		Passive = 3,
 	}
 }

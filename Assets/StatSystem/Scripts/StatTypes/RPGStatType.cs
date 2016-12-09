@@ -8,7 +8,16 @@
 /// </summary>
 namespace RPGSystems.StatSystem {
 	public enum RPGStatType {
+		None = 0,
 		Health = 1,
 		Stamina = 2,
+		Mana = 3,
+		Wisdom = 4,
+		Spirit = 5,
+		Strength = 6,
+		HealthRegen = 7,
+		ManaRegen = 8,
+		EnergyRegen = 9,
+		Energy = 10,
 	}
 }

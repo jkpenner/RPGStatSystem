@@ -2,4 +2,5 @@
 <Assets>
   <Asset Id="1" Name="Major" Type="StatCategoryAsset" />
   <Asset Id="2" Name="Minor" Type="StatCategoryAsset" />
+  <Asset Id="3" Name="Passive" Type="StatCategoryAsset" />
 </Assets>

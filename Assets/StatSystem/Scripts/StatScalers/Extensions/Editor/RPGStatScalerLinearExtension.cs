@@ -1,18 +1,18 @@
-﻿using UnityEngine;
-using System.Collections;
-using UtilitySystems.XmlDatabase.Editor;
-using System;
+﻿using System;
 using UnityEditor;
+using UtilitySystems.XmlDatabase.Editor;
 
-public class RPGStatScalerLinearExtension : EditorExtension {
-    public override bool CanHandleType(Type type) {
-        return typeof(RPGStatScalerLinearAsset).IsAssignableFrom(type);
-    }
+namespace RPGSystems.StatSystem.Editor {
+    public class RPGStatScalerLinearExtension : EditorExtension {
+        public override bool CanHandleType(Type type) {
+            return typeof(RPGStatScalerLinearAsset).IsAssignableFrom(type);
+        }
 
-    public override void OnGUI(object asset) {
-        var linear = (RPGStatScalerLinearAsset)asset;
+        public override void OnGUI(object asset) {
+            var linear = (RPGStatScalerLinearAsset)asset;
 
-        linear.Slope = EditorGUILayout.FloatField("Slope", linear.Slope);
-        linear.Offset = EditorGUILayout.FloatField("Offset", linear.Offset);
+            linear.Slope = EditorGUILayout.FloatField("Slope", linear.Slope);
+            linear.Offset = EditorGUILayout.FloatField("Offset", linear.Offset);
+        }
     }
 }

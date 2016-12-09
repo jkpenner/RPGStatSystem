@@ -5,7 +5,7 @@ namespace RPGSystems.StatSystem {
     /// <summary>
     /// The base class for all other Stats.
     /// </summary>
-    public class RPGStat : IStatValueChange, IStatScalable {
+    public class RPGStat : IStatValue, IStatScalable {
         /// <summary>
         /// Used by the StatBase Value Property
         /// </summary>
@@ -24,7 +24,7 @@ namespace RPGSystems.StatSystem {
         /// <summary>
         /// Event that triggers when the stat value changes
         /// </summary>
-        private RPGStatEvent _onValueChange;
+        private StatValueChangeEvent _onValueChange;
 
         /// <summary>
         /// Instance of stat scale handler used by this stat;
@@ -112,7 +112,7 @@ namespace RPGSystems.StatSystem {
         /// <summary>
         /// Adds a function of type RPGStatModifierEvent to the OnValueChange delagate.
         /// </summary>
-        public void AddValueListener(RPGStatEvent func) {
+        public void AddValueListener(StatValueChangeEvent func) {
 #if DEBUG_STAT_INFO
             Debug.LogFormat("[Stat Category {0}]: Add Value Listener", StatCategoryId);
 #endif
@@ -122,7 +122,7 @@ namespace RPGSystems.StatSystem {
         /// <summary>
         /// Removes a function of type RPGStatModifierEvent to the OnValueChange delagate.
         /// </summary>
-        public void RemoveValueListener(RPGStatEvent func) {
+        public void RemoveValueListener(StatValueChangeEvent func) {
 #if DEBUG_STAT_INFO
             Debug.LogFormat("[Stat Category {0}]: Remove Value Listener", StatCategoryId);
 #endif
@@ -136,7 +136,11 @@ namespace RPGSystems.StatSystem {
         /// </summary>
         /// <param name="level"></param>
         public void ScaleStatToLevel(int level) {
-            _statScaleValue = _statScaler.GetValue(level);
+            if (_statScaler != null) {
+                _statScaleValue = _statScaler.GetValue(level);
+            } else {
+                _statScaleValue = 0;
+            }
             Debug.Log("Scaling stat to " + level + " new scaled value " + _statScaleValue);
         }
     }

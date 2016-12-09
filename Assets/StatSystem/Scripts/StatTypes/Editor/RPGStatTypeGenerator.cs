@@ -63,6 +63,7 @@ namespace RPGSystems.StatSystem.Editor {
 
                 file.WriteLine("namespace RPGSystems.StatSystem {");
                 file.WriteLine("\tpublic enum RPGStatType {");
+                file.WriteLine("\t\tNone = 0,");
 
                 foreach(var asset in RPGStatTypeDatabase.Instance.GetAssets()) {
                     string statName = asset.Name.Replace(" ", string.Empty);

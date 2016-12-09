@@ -4,6 +4,7 @@ using RPGSystems.StatSystem.Database;
 using UtilitySystems.XmlDatabase.Editor;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace RPGSystems.StatSystem.Editor {
     [CustomEditor(typeof(RPGStatCollection))]
@@ -15,17 +16,29 @@ namespace RPGSystems.StatSystem.Editor {
         public override void OnInspectorGUI() {
             var collection = (RPGStatCollection)target;
 
+            DisplayCollectionAssetGUI(collection);
+
+            GUILayout.Space(4);
+
+            DisplayCollectionLevelGUI(collection);
+
+            GUILayout.Space(4);
+
+            DisplayCollectionGUI(collection);
+        }
+
+        private void DisplayCollectionAssetGUI(RPGStatCollection collection) {
             // Determine the string to display for the given stat collection
             var asset = RPGStatCollectionDatabase.Instance.Get(collection.StatCollectionId);
             string displayText;
             // If the asset is found within the database use it's name.
             if (asset != null) {
                 displayText = asset.Name;
-            } 
+            }
             // If the id is below zero no collection is assigned.
             else if (collection.StatCollectionId <= 0) {
                 displayText = "Not Set";
-            } 
+            }
             // If no asset is assigned and the id i above zero
             // the previous collection is currently missing.
             else {
@@ -44,9 +57,9 @@ namespace RPGSystems.StatSystem.Editor {
                 }, typeof(RPGStatCollectionWindow));
             }
             EditorGUI.EndDisabledGroup();
+        }
 
-            GUILayout.Space(4);
-
+        private void DisplayCollectionLevelGUI(RPGStatCollection collection) {
             // Show controls for editing values of stats in the editor
             GUILayout.BeginHorizontal(EditorStyles.toolbarButton);
             GUILayout.Label("Collection Level");
@@ -57,18 +70,39 @@ namespace RPGSystems.StatSystem.Editor {
             GUILayout.BeginVertical("Box");
 
             GUILayout.BeginHorizontal();
-            GUILayout.Label(string.Format("Level: {0}", collection.Level.ToString("D4")));
-            if (GUILayout.Button("+", EditorStyles.miniButtonLeft, GUILayout.Width(24)))
-                collection.ScaleToLevel(collection.Level + 1);
-            if (GUILayout.Button("-", EditorStyles.miniButtonRight, GUILayout.Width(24)))
-                collection.ScaleToLevel(collection.Level - 1);
+            if (collection.ScaledLevel == 0) {
+                GUILayout.Label("Level", EditorStyles.miniButtonLeft, GUILayout.Width(80));
+            } else {
+                GUILayout.Label("Level(Scaled)", EditorStyles.miniButtonLeft, GUILayout.Width(80));
+            }
+
+            GUILayout.Label(collection.Level.ToString(), EditorStyles.miniButtonMid);
+            if (GUILayout.Button("+", EditorStyles.miniButtonMid, GUILayout.Width(40))) {
+                if (Application.isPlaying) {
+                    collection.ScaleToLevel(collection.Level + 1);
+                } else {
+                    collection.SetLevel(collection.NormalLevel + 1);
+                }
+            }
+            if (GUILayout.Button("-", EditorStyles.miniButtonRight, GUILayout.Width(40))) {
+                if (Application.isPlaying) {
+                    collection.ScaleToLevel(collection.Level - 1);
+                } else {
+                    collection.SetLevel(collection.NormalLevel - 1);
+                }
+            }
             GUILayout.EndHorizontal();
 
-            GUILayout.Label("Current Exp: " + collection.CurrentExp);
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Current Exp", EditorStyles.miniButtonLeft, GUILayout.Width(80));
+            GUILayout.Label(collection.CurrentExp.ToString(), EditorStyles.miniButtonMid);
+            GUILayout.Label("", EditorStyles.miniButtonRight, GUILayout.Width(80));
+            GUILayout.EndHorizontal();
+
             GUILayout.EndVertical();
+        }
 
-            GUILayout.Space(4);
-
+        private void DisplayCollectionGUI(RPGStatCollection collection) {
             // Show controls for editing values of stats in the editor
             GUILayout.BeginHorizontal(EditorStyles.toolbarButton);
             GUILayout.Label("Stats");
@@ -101,7 +135,7 @@ namespace RPGSystems.StatSystem.Editor {
                 foreach (var group in groups) {
                     GUILayout.Label(RPGStatCategoryDatabase.Instance.Get(group.First().Value.StatCategoryId).Name, EditorStyles.centeredGreyMiniLabel);
                     foreach (var pair in group) {
-                        var currentValue = pair.Value as IStatCurrentValue;
+                        var currentValue = pair.Value as IStatValueCurrent;
 
                         bool isActive = activeStatIds.Contains(pair.Key);
 
@@ -112,7 +146,7 @@ namespace RPGSystems.StatSystem.Editor {
                         if (currentValue == null) {
                             GUILayout.Label(string.Format("{0, 13}", pair.Value.StatValue), EditorStyles.miniButtonMid, GUILayout.Width(120));
                         } else {
-                            GUILayout.Label(string.Format("{0, 6}", currentValue.StatCurrentValue), EditorStyles.miniButtonMid, GUILayout.Width(60));
+                            GUILayout.Label(string.Format("{0, 6}", currentValue.StatValueCurrent), EditorStyles.miniButtonMid, GUILayout.Width(60));
                             GUILayout.Label(string.Format("{0, 6}", pair.Value.StatValue), EditorStyles.miniButtonMid, GUILayout.Width(60));
                         }
 
@@ -158,13 +192,13 @@ namespace RPGSystems.StatSystem.Editor {
                         if (currentValue != null) {
                             GUILayout.BeginHorizontal();
                             GUILayout.Label("Current", GUILayout.Width(60));
-                            GUILayout.Label(currentValue.StatCurrentValue.ToString("D8"), EditorStyles.centeredGreyMiniLabel);
+                            GUILayout.Label(currentValue.StatValueCurrent.ToString("D8"), EditorStyles.centeredGreyMiniLabel);
                             if (GUILayout.Button("+", EditorStyles.miniButtonLeft, GUILayout.Width(30))) {
-                                currentValue.StatCurrentValue += increaseAmount;
+                                currentValue.StatValueCurrent += increaseAmount;
                             }
 
                             if (GUILayout.Button("-", EditorStyles.miniButtonRight, GUILayout.Width(30))) {
-                                currentValue.StatCurrentValue -= increaseAmount;
+                                currentValue.StatValueCurrent -= increaseAmount;
                             }
                             GUILayout.EndHorizontal();
                         }
@@ -201,8 +235,6 @@ namespace RPGSystems.StatSystem.Editor {
                         }
 
                         GUILayout.EndVertical();
-
-
                     }
                 }
 

@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Assets>
   <Asset Id="1" Name="Health" Type="StatTypeAsset">
-    <NameShort />
-    <Description />
+    <NameShort>Hp</NameShort>
+    <Description>When health reaches zero you die.</Description>
     <Icon Path="False" />
   </Asset>
   <Asset Id="2" Name="Stamina" Type="StatTypeAsset">
@@ -26,6 +26,26 @@
     <Icon Path="False" />
   </Asset>
   <Asset Id="6" Name="Strength" Type="StatTypeAsset">
+    <NameShort />
+    <Description />
+    <Icon Path="False" />
+  </Asset>
+  <Asset Id="7" Name="Health Regen" Type="StatTypeAsset">
+    <NameShort />
+    <Description />
+    <Icon Path="False" />
+  </Asset>
+  <Asset Id="8" Name="Mana Regen" Type="StatTypeAsset">
+    <NameShort />
+    <Description />
+    <Icon Path="False" />
+  </Asset>
+  <Asset Id="9" Name="Energy Regen" Type="StatTypeAsset">
+    <NameShort />
+    <Description />
+    <Icon Path="False" />
+  </Asset>
+  <Asset Id="10" Name="Energy" Type="StatTypeAsset">
     <NameShort />
     <Description />
     <Icon Path="False" />
