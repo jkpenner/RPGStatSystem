@@ -4,11 +4,10 @@ using UnityEditor;
 using RPGSystems.StatSystem.Database;
 using UtilitySystems.XmlDatabase;
 using UtilitySystems.XmlDatabase.Editor;
+using System;
 
 namespace RPGSystems.StatSystem.Editor {
     public class RPGStatCollectionWindow : XmlDatabaseWindowComplex<RPGStatCollectionAsset> {
-        RPGStatCollectionDatabase _database = null;
-
         private Vector2 statSelectionScroll = Vector2.zero;
         private float statSelectionWidth = 200;
 
@@ -33,11 +32,7 @@ namespace RPGSystems.StatSystem.Editor {
         }
 
         protected override AbstractXmlDatabase<RPGStatCollectionAsset> GetDatabaseInstance() {
-            if (_database == null) {
-                _database = new RPGStatCollectionDatabase();
-                _database.LoadDatabase();
-            }
-            return _database;
+            return RPGStatCollectionDatabase.Instance;
         }
 
         protected override RPGStatCollectionAsset CreateDefaultAsset() {    
@@ -47,7 +42,7 @@ namespace RPGSystems.StatSystem.Editor {
         protected override void DisplayAssetGUI(RPGStatCollectionAsset asset) {
             GUILayout.BeginVertical();
 
-            var selectedCollection = _database.Get(SelectedAssetId);
+            var selectedCollection = RPGStatCollectionDatabase.Instance.Get(SelectedAssetId);
             if (selectedCollection != null) {
 
                 GUILayout.Label(selectedCollection.Name, EditorStyles.toolbarButton);
@@ -82,12 +77,13 @@ namespace RPGSystems.StatSystem.Editor {
             GUILayout.BeginHorizontal(EditorStyles.toolbar);
             var statType = RPGStatTypeDatabase.Instance.Get(stat.AssignedStatId, true);
 
-            GUILayout.Label(string.Format("[{0}]: {1}",
-                stat.CreateInstance().GetType().Name, statType == null ? "Stat Type Not Set" : statType.Name));
+            GUILayout.Label(string.Format("[{0}]: {1}", stat.CreateInstance().GetType().Name, 
+                statType == null ? "Stat Type Not Set" : statType.Name));
+
             if (GUILayout.Button(statType == null ? "Assign Type" : "Change Type", EditorStyles.toolbarButton, GUILayout.Width(100))) {
-                RPGStatTypeDatabase.Instance.LoadDatabase();
                 XmlDatabaseEditorUtility.ShowContext(RPGStatTypeDatabase.Instance, (statTypeAsset) => {
                     stat.AssignedStatId = statTypeAsset.Id;
+                    Debug.Log("Assigning stat to stat type " + statTypeAsset.Id);
                 }, typeof(RPGStatTypeWindow));
             }
             GUILayout.EndHorizontal();

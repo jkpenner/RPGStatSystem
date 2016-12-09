@@ -43,8 +43,9 @@ namespace UtilitySystems.XmlDatabase.Editor {
             }
 
             foreach(var asset in database.GetAssets()) {
+                T selectedAsset = asset;
                 menu.AddItem(new GUIContent(asset.Name), false,
-                    (index) => { callback(database.Get(asset.Id)); }, asset.Id);
+                    (index) => { callback(database.Get((int)index)); }, selectedAsset.Id);
             }
 
             return menu;

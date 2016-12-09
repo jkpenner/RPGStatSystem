@@ -49,6 +49,28 @@ namespace RPGSystems.StatSystem.Editor {
 
             // Show controls for editing values of stats in the editor
             GUILayout.BeginHorizontal(EditorStyles.toolbarButton);
+            GUILayout.Label("Collection Level");
+            GUILayout.EndHorizontal();
+
+            GUILayout.Space(-4);
+
+            GUILayout.BeginVertical("Box");
+
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(string.Format("Level: {0}", collection.Level.ToString("D4")));
+            if (GUILayout.Button("+", EditorStyles.miniButtonLeft, GUILayout.Width(24)))
+                collection.ScaleToLevel(collection.Level + 1);
+            if (GUILayout.Button("-", EditorStyles.miniButtonRight, GUILayout.Width(24)))
+                collection.ScaleToLevel(collection.Level - 1);
+            GUILayout.EndHorizontal();
+
+            GUILayout.Label("Current Exp: " + collection.CurrentExp);
+            GUILayout.EndVertical();
+
+            GUILayout.Space(4);
+
+            // Show controls for editing values of stats in the editor
+            GUILayout.BeginHorizontal(EditorStyles.toolbarButton);
             GUILayout.Label("Stats");
             GUILayout.Label("Increment By", GUILayout.Width(90));
             // Increase the amount stat values are adjusted by multiples of 10

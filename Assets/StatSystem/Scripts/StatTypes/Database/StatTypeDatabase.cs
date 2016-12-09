@@ -8,6 +8,7 @@ namespace RPGSystems.StatSystem.Database {
             get {
                 if (_instance == null) {
                     _instance = new RPGStatTypeDatabase();
+                    _instance.LoadDatabase();
                 }
                 return _instance;
             }

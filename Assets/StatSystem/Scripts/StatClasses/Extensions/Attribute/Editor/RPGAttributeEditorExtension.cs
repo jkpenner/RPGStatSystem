@@ -16,7 +16,7 @@ namespace RPGSystems.StatSystem.Editor {
 
             GUILayout.BeginHorizontal(EditorStyles.toolbar);
             GUILayout.Label("Stat Linkers");
-            if (GUILayout.Button("+", EditorStyles.toolbarButton, GUILayout.Width(30))) {
+            if (GUILayout.Button("Add", EditorStyles.toolbarButton, GUILayout.Width(60))) {
                 XmlDatabaseEditorUtility.GetGenericMenu(RPGStatLinkerEditorUtility.GetNames(), (index) => {
                     var newLinker = RPGStatLinkerEditorUtility.CreateAsset(index);
                     stat.StatLinkers.Add(newLinker);
@@ -31,17 +31,25 @@ namespace RPGSystems.StatSystem.Editor {
                 for (int i = 0; i < stat.StatLinkers.Count; i++) {
                     var linker = stat.StatLinkers[i];
                     if (linker != null) {
-                        GUILayout.BeginHorizontal(EditorStyles.miniButton);
-                        GUILayout.Label(string.Format("Linker Type: {0}", linker.GetType().Name));
-                        if (GUILayout.Button("-", EditorStyles.miniButton, GUILayout.Width(30))) {
+                        GUILayout.Space(10);
+
+                        // Add space to the left
+                        GUILayout.BeginHorizontal();
+                        GUILayout.Space(4);
+
+
+                        GUILayout.BeginVertical("Box");
+
+                        GUILayout.Space(-10);
+                        GUILayout.BeginHorizontal(EditorStyles.toolbarButton);
+                        EditorGUILayout.LabelField("Linker", linker.GetType().Name);
+
+                        if (GUILayout.Button("Remove", EditorStyles.toolbarButton, GUILayout.Width(70))) {
                             stat.StatLinkers.RemoveAt(i);
                         }
                         GUILayout.EndHorizontal();
 
-                        GUILayout.Space(-3);
-                        GUILayout.BeginHorizontal();
-                        GUILayout.Space(8);
-                        GUILayout.BeginVertical("Box");
+                        
 
                         foreach (var extension in RPGStatLinkerEditorUtility.GetExtensions()) {
                             //Debug.Log("CHecking linker of type : " + linker.GetType().ToString());
@@ -50,6 +58,8 @@ namespace RPGSystems.StatSystem.Editor {
                             }
                         }
                         GUILayout.EndVertical();
+
+                        // Add space to right 
                         GUILayout.Space(4);
                         GUILayout.EndHorizontal();
                     } else {

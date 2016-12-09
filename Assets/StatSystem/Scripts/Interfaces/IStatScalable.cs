@@ -4,6 +4,5 @@
     /// </summary>
     public interface IStatScalable {
         void ScaleStatToLevel(int level);
-        void GetStatIncreaseForLevel(int level);
     }
 }

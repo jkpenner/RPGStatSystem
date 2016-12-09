@@ -15,6 +15,10 @@ namespace UtilitySystems.XmlDatabase {
             writer.WriteAttributeString(name, value.ToString());
         }
 
+        static public void SetAttr(this XmlWriter writer, string name, string value) {
+            writer.WriteAttributeString(name, value);
+        }
+
         static public void SetAttr(this XmlWriter writer, string name, GameObject value) {
             writer.WriteAttributeString(name, XmlDatabaseUtility.GetAssetResourcePath(value));
         }

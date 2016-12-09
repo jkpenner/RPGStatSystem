@@ -19,6 +19,91 @@ namespace RPGSystems.StatSystem {
         private Dictionary<int, RPGStat> _statDict;
 
         /// <summary>
+        /// Gets the current level of the collection. If the
+        /// collection was scaled to a level, then the scaled value
+        /// is returned, else return the normal level.
+        /// </summary>
+        public int Level {
+            get {
+                if (ScaledLevel != 0) {
+                    return ScaledLevel;
+                } else {
+                    return NormalLevel;
+                }
+            }
+        }
+
+        /// <summary>
+        /// The level value based off of aquired exp
+        /// </summary>
+        public int NormalLevel { get; private set; }
+        /// <summary>
+        /// The level value the collection is scaled to
+        /// </summary>
+        public int ScaledLevel { get; private set; }
+
+        /// <summary>
+        /// How much for the current level the collection has
+        /// </summary>
+        public int CurrentExp { get; private set; }
+        /// <summary>
+        /// How much exp is required to level up
+        /// </summary>
+        public int RequiredExp { get; private set; }
+
+        /// <summary>
+        /// Modify the amount of exp the collection has and
+        /// handles if the collection is should level up
+        /// </summary>
+        /// <param name="amount"></param>
+        public void ModifyExp(int amount) {
+            CurrentExp += amount;
+
+            while(CurrentExp >= RequiredExp) {
+                CurrentExp -= RequiredExp;
+
+                // Increase current level
+                SetLevel(Level + 1);
+
+                // Trigger level up event
+            }
+        }
+
+        /// <summary>
+        /// Sets the collection's normal level and updates
+        /// the required experience to level
+        /// </summary>
+        private void SetLevel(int level) {
+            NormalLevel = Mathf.Max(level, 1);
+            RequiredExp = GetExpForLevel(Level + 1);
+            ScaleStatCollection(Level);
+        }
+
+        /// <summary>
+        /// Scale the collection to a given level
+        /// </summary>
+        public void ScaleToLevel(int level) {
+            ScaledLevel = Mathf.Max(level, 1);
+            ScaleStatCollection(Level);
+        }
+
+        /// <summary>
+        /// Stop scaling the collection
+        /// </summary>
+        public void ClearScale() {
+            ScaledLevel = 0;
+            ScaleStatCollection(Level);
+        }
+
+        /// <summary>
+        /// Get the experience required to level
+        /// </summary>
+        public int GetExpForLevel(int level) {
+            return ((level * level) + level * 3) * 4;
+        }
+
+
+        /// <summary>
         /// Dictionary containing all stats held within the collection
         /// </summary>
         public Dictionary<int, RPGStat> StatDict {

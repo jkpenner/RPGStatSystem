@@ -1,7 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Assets>
-  <Asset Id="1" Name="" Type="RPGStatCollectionAsset">
-    <Stat BaseValue="10" CategoryId="1" AssignedStatId="1" />
-    <Stat BaseValue="0" CategoryId="0" AssignedStatId="0" />
+  <Asset Id="1" Name="Minion" Type="RPGStatCollectionAsset">
+    <Stat AssetType="RPGVitalAsset" BaseValue="1000" CategoryId="1" AssignedStatId="1">
+      <StatScaler Type="RPGStatScalerLinearAsset" Slope="250" Offset="0" />
+      <StatLinker Type="RPGStatLinkerBasicAsset" LinkedStatType="2" Ratio="22" />
+      <StatLinker Type="RPGStatLinkerBasicAsset" LinkedStatType="6" Ratio="6" />
+    </Stat>
+    <Stat AssetType="RPGAttributeAsset" BaseValue="100" CategoryId="2" AssignedStatId="2">
+      <StatScaler Type="RPGStatScalerLinearAsset" Slope="23213" Offset="0" />
+    </Stat>
+    <Stat AssetType="RPGVitalAsset" BaseValue="0" CategoryId="1" AssignedStatId="3">
+      <StatScaler Type="RPGStatScalerLinearAsset" Slope="324342" Offset="3434" />
+      <StatLinker Type="RPGStatLinkerBasicAsset" LinkedStatType="4" Ratio="55" />
+      <StatLinker Type="RPGStatLinkerBasicAsset" LinkedStatType="5" Ratio="22" />
+    </Stat>
+    <Stat AssetType="RPGAttributeAsset" BaseValue="0" CategoryId="2" AssignedStatId="4">
+      <StatScaler Type="RPGStatScalerLinearAsset" Slope="0" Offset="0" />
+    </Stat>
+    <Stat AssetType="RPGAttributeAsset" BaseValue="0" CategoryId="2" AssignedStatId="5">
+      <StatScaler Type="RPGStatScalerLinearAsset" Slope="0" Offset="0" />
+    </Stat>
+    <Stat AssetType="RPGAttributeAsset" BaseValue="0" CategoryId="2" AssignedStatId="6">
+      <StatScaler Type="RPGStatScalerLinearAsset" Slope="0" Offset="0" />
+    </Stat>
   </Asset>
 </Assets>

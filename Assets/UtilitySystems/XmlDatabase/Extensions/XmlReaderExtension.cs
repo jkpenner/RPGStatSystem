@@ -91,7 +91,7 @@ namespace UtilitySystems.XmlDatabase {
                 if (go != null) {
                     return go;
                 } else {
-                    Debug.LogWarning("No Resource not found at path: " + path);
+                    //Debug.LogWarning("No Resource not found at path: " + path);
                 }
             }
             return null;

@@ -5,7 +5,7 @@ namespace RPGSystems.StatSystem {
     /// <summary>
     /// The base class for all other Stats.
     /// </summary>
-    public class RPGStat : IStatValueChange {
+    public class RPGStat : IStatValueChange, IStatScalable {
         /// <summary>
         /// Used by the StatBase Value Property
         /// </summary>
@@ -17,15 +17,33 @@ namespace RPGSystems.StatSystem {
         private int _statCategoryId;
 
         /// <summary>
+        /// Used by the StatScaleValue Property
+        /// </summary>
+        private int _statScaleValue;
+
+        /// <summary>
         /// Event that triggers when the stat value changes
         /// </summary>
         private RPGStatEvent _onValueChange;
 
         /// <summary>
+        /// Instance of stat scale handler used by this stat;
+        /// </summary>
+        private RPGStatScaler _statScaler;
+
+        /// <summary>
         /// The Total Value of the stat
         /// </summary>
         public virtual int StatValue {
-            get { return StatBaseValue; }
+            get { return StatBaseValue + StatScaleValue; }
+        }
+
+        /// <summary>
+        /// The amount the stat is increased by it's
+        /// currenty level scale.
+        /// </summary>
+        public int StatScaleValue {
+            get { return _statScaleValue; }
         }
 
         /// <summary>
@@ -58,6 +76,12 @@ namespace RPGSystems.StatSystem {
             this.StatBaseValue = asset.StatBaseValue;
             this.AssignedStatId = asset.AssignedStatId;
             this.StatCategoryId = asset.StatCategoryId;
+
+            if (asset.StatScaler != null) {
+                this._statScaler = asset.StatScaler.CreateInstance();
+            } else {
+                this._statScaler = null;
+            }
         }
 
         /// <summary>
@@ -103,6 +127,17 @@ namespace RPGSystems.StatSystem {
             Debug.LogFormat("[Stat Category {0}]: Remove Value Listener", StatCategoryId);
 #endif
             _onValueChange -= func;
+        }
+
+        /// <summary>
+        /// Scales the stat to the given level. Uses the instance 
+        /// of the stat scale handler assigned to the stat. If handler
+        /// is null, the StatScaleValue remains at zero.
+        /// </summary>
+        /// <param name="level"></param>
+        public void ScaleStatToLevel(int level) {
+            _statScaleValue = _statScaler.GetValue(level);
+            Debug.Log("Scaling stat to " + level + " new scaled value " + _statScaleValue);
         }
     }
 }

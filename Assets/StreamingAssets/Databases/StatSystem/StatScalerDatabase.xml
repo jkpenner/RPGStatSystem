@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Assets>
+  <Asset Id="1" Name="Simple Linear" Type="RPGStatScalerLinearAsset">
+    <StatScaler Offset="25" Slope="100" />
+  </Asset>
+  <Asset Id="2" Name="Linear 2" Type="RPGStatScalerLinearAsset">
+    <StatScaler Offset="10" Slope="24" />
+  </Asset>
+</Assets>

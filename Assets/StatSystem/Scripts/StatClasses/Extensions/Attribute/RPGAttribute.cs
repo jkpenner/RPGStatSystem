@@ -5,7 +5,7 @@ namespace RPGSystems.StatSystem {
     /// <summary>
     /// RPGStat that inherits from RPGStatModifiable and implements IStatScalable and IStatLinkable.
     /// </summary>
-    public class RPGAttribute : RPGStatModifiable, IStatScalable, IStatLinkable {
+    public class RPGAttribute : RPGStatModifiable, IStatLinkable {
         /// <summary>
         /// Used By StatLevelValue Property
         /// </summary>

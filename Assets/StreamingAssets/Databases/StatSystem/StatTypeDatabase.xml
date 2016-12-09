@@ -3,11 +3,31 @@
   <Asset Id="1" Name="Health" Type="StatTypeAsset">
     <NameShort />
     <Description />
-    <Icon Path="" />
+    <Icon Path="False" />
   </Asset>
   <Asset Id="2" Name="Stamina" Type="StatTypeAsset">
     <NameShort />
     <Description />
-    <Icon Path="" />
+    <Icon Path="False" />
+  </Asset>
+  <Asset Id="3" Name="Mana" Type="StatTypeAsset">
+    <NameShort />
+    <Description />
+    <Icon Path="False" />
+  </Asset>
+  <Asset Id="4" Name="Wisdom" Type="StatTypeAsset">
+    <NameShort />
+    <Description />
+    <Icon Path="False" />
+  </Asset>
+  <Asset Id="5" Name="Spirit" Type="StatTypeAsset">
+    <NameShort />
+    <Description />
+    <Icon Path="False" />
+  </Asset>
+  <Asset Id="6" Name="Strength" Type="StatTypeAsset">
+    <NameShort />
+    <Description />
+    <Icon Path="False" />
   </Asset>
 </Assets>

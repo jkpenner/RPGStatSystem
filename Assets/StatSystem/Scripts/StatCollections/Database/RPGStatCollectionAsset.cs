@@ -15,6 +15,7 @@ namespace RPGSystems.StatSystem.Database {
         public override void OnSaveAsset(XmlWriter writer) {
             foreach (var stat in Stats) {
                 writer.WriteStartElement("Stat");
+                writer.SetAttr("AssetType", stat.GetType().Name);
                 stat.OnSaveAsset(writer);
                 writer.WriteEndElement();
             }
@@ -35,9 +36,11 @@ namespace RPGSystems.StatSystem.Database {
                     }
                     break;
                 default:
-                    // If element is not handled, it must be handled by
-                    // a stat asset. Pass the reader to the most recent Stat.
-                    Stats[Stats.Count - 1].OnLoadAsset(reader);
+                    if (Stats.Count > 0) {
+                        // If element is not handled, it must be handled by
+                        // a stat asset. Pass the reader to the most recent Stat.
+                        Stats[Stats.Count - 1].OnLoadAsset(reader);
+                    }
                     break;
             }
         }

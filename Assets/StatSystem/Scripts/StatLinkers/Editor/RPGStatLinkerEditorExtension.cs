@@ -25,7 +25,7 @@ namespace RPGSystems.StatSystem.Editor {
 
                 GUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField("Linked Stat", displayText);
-                if (GUILayout.Button("Change Type", EditorStyles.miniButton, GUILayout.Width(100))) {
+                if (GUILayout.Button("Change Type", EditorStyles.miniButtonMid, GUILayout.Width(100))) {
                     XmlDatabaseEditorUtility.ShowContext(RPGStatTypeDatabase.Instance, (statTypeAsset) => {
                         link.linkedStatType = statTypeAsset.Id;
                         //EditorUtility.SetDirty(RPGStatCollectionDatabase.Instance);
